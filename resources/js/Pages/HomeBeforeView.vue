@@ -7,7 +7,7 @@
       <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 my-6 rounded-lg">
           <p class="font-semibold">Cek ketersediaan kondisi terbaru untuk melakukan pendakian. <a href="#" class="underline">Pelajari Selengkapnya</a></p>
       </div>
-
+      
       <!-- Content Sections (Trail Map, Kondisi Cuaca, Berita, dll.) -->
       <div class="mt-8">
           <Detail />
