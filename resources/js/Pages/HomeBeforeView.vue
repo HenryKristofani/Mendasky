@@ -27,7 +27,7 @@ import HeroSection from './HomeComponents/Hero.vue';
 import Detail from './HomeComponents/Detail.vue';
 import Peringatan from './HomeComponents/Peringatan.vue';
 import Berita from './HomeComponents/Berita.vue';
-import InstallApp from './HomeComponents/InstallApp.vue';
+import InstallApp from './HomeComponents/InstallApp.vue'
 
 export default {
   components: {

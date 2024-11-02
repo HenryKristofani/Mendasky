@@ -1,25 +1,54 @@
-<script setup>
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+<template>
+    <main class="flex flex-col text-base rounded-none max-w-[400px]">
+        <h1 class="z-10 self-center mt-0 text-3xl font-semibold text-center text-neutral-900">Login</h1>
+        <form @submit.prevent="submit">
+            <div class="mt-12">
+                <label for="email" class="block text-sm font-medium tracking-wide text-neutral-900">
+                    Email address
+                </label>
+                <input
+                    id="email"
+                    type="email"
+                    v-model="form.email"
+                    required
+                    class="w-full px-3 py-3 mt-1 rounded bg-zinc-100 text-neutral-900"
+                    placeholder="Email address"
+                />
+            </div>
+            <div class="mt-5">
+                <label for="password" class="block text-sm font-medium tracking-wide text-neutral-900">
+                    Password
+                </label>
+                <input
+                    id="password"
+                    type="password"
+                    v-model="form.password"
+                    required
+                    class="w-full px-3 py-3 mt-1 rounded bg-zinc-100 text-neutral-900"
+                    placeholder="Password"
+                />
+            </div>
+            <div class="flex justify-between mt-5 text-sm text-neutral-600">
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="stayLoggedIn" v-model="form.remember" class="w-5 h-5 border border-stone-300 rounded-md" />
+                    <label for="stayLoggedIn">Biarkan saya tetap masuk</label>
+                </div>
+                <a href="#" class="font-medium text-blue-500">Lupa password?</a>
+            </div>
+            <button type="submit" class="w-full px-5 py-3 mt-5 text-white bg-cyan-700 rounded-md">
+                Login
+            </button>
+        </form>
+    </main>
+</template>
 
-defineProps({
-    canResetPassword: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
+<script setup>
+import { useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     email: '',
     password: '',
-    remember: false,
+    remember: false
 });
 
 const submit = () => {
@@ -28,73 +57,3 @@ const submit = () => {
     });
 };
 </script>
-
-<template>
-    <GuestLayout>
-        <Head title="Log in" />
-
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
-
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div>
-        </form>
-    </GuestLayout>
-</template>

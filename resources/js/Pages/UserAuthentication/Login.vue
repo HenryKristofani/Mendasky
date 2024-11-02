@@ -38,7 +38,7 @@
           <a href="#" class="font-medium text-right text-blue-500">Lupa password?</a>
         </div>
         <button type="submit" class="w-full gap-2.5 self-stretch px-5 py-3 mt-5 font-medium tracking-wide leading-none text-white bg-cyan-700 rounded-md">
-          Lanjutkan dengan Email
+          Login
         </button>
       </form>
       <p class="gap-2.5 self-center px-4 py-1 mt-6 text-sm tracking-wide leading-none text-center bg-white text-neutral-600">

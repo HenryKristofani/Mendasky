@@ -22,7 +22,7 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="Register" />
+        <h1 class="z-10 self-center mt-0 text-3xl font-semibold text-center text-neutral-900">Register</h1>
 
         <form @submit.prevent="submit">
             <div>
