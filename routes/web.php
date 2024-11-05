@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ReservasiController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,6 +26,8 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 // Rute logout
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
+Route::post('/submit-reservasi', [ReservasiController::class, 'store']);
+
 // Rute dashboard dengan middleware autentikasi
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -32,7 +35,7 @@ Route::get('/dashboard', function () {
 
 // Rute HomeView setelah login
 Route::get('/home', function () {
-    return Inertia::render('HomeView');
+    return Inertia::render('HomeView'); 
 })->middleware(['auth'])->name('home');
 
 // Rute Reservasi

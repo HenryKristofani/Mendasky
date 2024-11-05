@@ -4,11 +4,7 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">
                 Formulir Reservasi Mendaki
             </h2>
-            <form
-                action="/submit-reservasi"
-                method="POST"
-                enctype="multipart/form-data"
-            >
+            <form @submit.prevent="submitForm" enctype="multipart/form-data">
                 <!-- Form Ketua Kelompok -->
                 <!-- Nama Ketua Kelompok -->
                 <div class="mb-4">
@@ -16,7 +12,7 @@
                     <input
                         type="text"
                         id="nama"
-                        name="nama_ketua"
+                        v-model="nama_ketua"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Masukkan nama ketua kelompok"
                         required
@@ -29,7 +25,7 @@
                     <input
                         type="text"
                         id="nik"
-                        name="nik_ketua"
+                        v-model="nik_ketua"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Masukkan NIK ketua kelompok"
                         required
@@ -42,7 +38,7 @@
                     <input
                         type="file"
                         id="ktp"
-                        name="ktp_ketua"
+                        @change="handleFileUpload"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         accept="image/*"
                         required
@@ -55,7 +51,7 @@
                     <input
                         type="tel"
                         id="telepon"
-                        name="telepon_ketua"
+                        v-model="telepon_ketua"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Masukkan nomor telepon ketua kelompok"
                         required
@@ -67,7 +63,7 @@
                     <label for="alamat" class="block text-gray-700 font-semibold">Alamat</label>
                     <textarea
                         id="alamat"
-                        name="alamat_ketua"
+                        v-model="alamat_ketua"
                         rows="4"
                         class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
                         placeholder="Masukkan alamat ketua kelompok"
@@ -135,21 +131,73 @@ export default {
     name: "ReservationOnline",
     data() {
         return {
-            anggota: [
-                { nama: "", nik: "" } // Data awal untuk satu anggota
-            ]
+            anggota: [{ nama: "", nik: "" }],
+            nama_ketua: "",
+            nik_ketua: "",
+            ktp_ketua: null,
+            telepon_ketua: "",
+            alamat_ketua: "",
         };
+    },
+    mounted() {
+        // Ambil CSRF token dari meta tag dan simpan di localStorage
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        localStorage.setItem('csrf_token', csrfToken);
     },
     methods: {
         addMember() {
-            // Hanya tambahkan anggota jika jumlah anggota kurang dari 4
             if (this.anggota.length < 4) {
                 this.anggota.push({ nama: "", nik: "" });
             }
         },
         removeMember(index) {
-            this.anggota.splice(index, 1); // Menghapus anggota berdasarkan index
+            this.anggota.splice(index, 1);
+        },
+        handleFileUpload(event) {
+            this.ktp_ketua = event.target.files[0];
+        },
+        async submitForm() {
+    // Buat form data untuk mengirim data dengan file
+    let formData = new FormData();
+    formData.append('nama_ketua', this.nama_ketua);
+    formData.append('nik_ketua', this.nik_ketua);
+    formData.append('ktp_ketua', this.ktp_ketua);
+    formData.append('telepon_ketua', this.telepon_ketua);
+    formData.append('alamat_ketua', this.alamat_ketua);
+
+    // Menambahkan setiap anggota ke FormData sebagai array
+    this.anggota.forEach((member, index) => {
+        formData.append(`anggota[${index}][nama]`, member.nama);
+        formData.append(`anggota[${index}][nik]`, member.nik);
+    });
+
+    // Ambil CSRF token dari localStorage
+    const csrfToken = localStorage.getItem('csrf_token');
+
+    try {
+        const response = await fetch('/submit-reservasi', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': csrfToken, // Sertakan CSRF token di header
+                'X-Requested-With': 'XMLHttpRequest', // Menyatakan permintaan AJAX
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert(data.message);
+        } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            alert('Terjadi kesalahan saat menyimpan data.');
         }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        alert('Terjadi kesalahan saat menyimpan data.');
+    }
+}
+
     }
 };
 </script>
