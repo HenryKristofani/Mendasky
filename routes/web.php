@@ -34,3 +34,8 @@ Route::get('/dashboard', function () {
 Route::get('/home', function () {
     return Inertia::render('HomeView');
 })->middleware(['auth'])->name('home');
+
+// Rute Reservasi
+Route::get('/reservasi', function () {
+    return Inertia::render('ReservasiView');
+})->middleware(['auth'])->name('reservasi');
