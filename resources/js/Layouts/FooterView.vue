@@ -39,6 +39,8 @@
             <li><a href="#merapi" data-layername="merapi" class="block mt-3">Merapi</a></li>
             <li><a href="#slamet" data-layername="slamet" class="block mt-3">Slamet</a></li>
             <li><a href="#sindoro" data-layername="sindoro" class="block mt-3">Sindoro</a></li>
+            <li><a href="#muria" data-layername="muria" class="block mt-3">Muria</a></li>
+            
           </ul>
         </nav>
   
@@ -64,7 +66,6 @@
         </nav>
       </main>
   
-      <a href="#muria" data-layername="muria" class="mt-3 text-sm tracking-wide text-neutral-600">Muria</a>
       <a href="#see-more" data-layername="seeMore" class="mt-16 text-sm tracking-wide text-blue-500 max-md:mt-10">See more</a>
   
       <footer class="flex flex-col justify-center items-end self-stretch px-16 py-2.5 mt-8 w-full text-sm leading-snug bg-gray-200 text-neutral-600 max-md:px-5 max-md:max-w-full">
