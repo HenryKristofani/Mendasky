@@ -87,6 +87,6 @@
 
 <script>
   export default {
-    name: 'BeritaTerkini'
+    name: 'berita'
   }
 </script>
