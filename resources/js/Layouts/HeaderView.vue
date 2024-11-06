@@ -8,7 +8,7 @@
       </div>
       <nav class="flex flex-wrap gap-10 items-start mt-3.5 text-base tracking-wide whitespace-nowrap text-zinc-800">
           <a href="#" class="hover:underline">Beranda</a>
-          <a href="#" class="hover:underline">Reservasi</a>
+          <a href="/reservasi" class="hover:underline">Reservasi</a>
           <a href="#" class="hover:underline">Berita</a>
           <a href="#" class="hover:underline">Panduan</a>
           <a href="#" class="hover:underline">Kontak</a>

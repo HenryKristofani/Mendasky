@@ -6,7 +6,6 @@ use App\Http\Controllers\ReservasiController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
 // Rute beranda
 Route::get('/', function () {
     return Inertia::render('HomeBeforeView', [
@@ -26,8 +25,6 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 // Rute logout
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-Route::post('/submit-reservasi', [ReservasiController::class, 'store']);
-
 // Rute dashboard dengan middleware autentikasi
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -35,10 +32,30 @@ Route::get('/dashboard', function () {
 
 // Rute HomeView setelah login
 Route::get('/home', function () {
-    return Inertia::render('HomeView'); 
+    return Inertia::render('HomeView');
 })->middleware(['auth'])->name('home');
 
-// Rute Reservasi
+// Rute Reservasi (formulir reservasi)
 Route::get('/reservasi', function () {
     return Inertia::render('ReservasiView');
 })->middleware(['auth'])->name('reservasi');
+
+// Rute ReservasiList (daftar reservasi)
+Route::get('/reservasilist', function () {
+    return Inertia::render('ReservasiListView');
+})->middleware(['auth'])->name('reservasilist');
+
+// Rute Edit Reservasi
+Route::get('/editreservasi', function () {
+    return Inertia::render('EditReservasiView');
+})->middleware(['auth'])->name('editreservasi');
+
+// Rute CRUD untuk Reservasi
+Route::middleware('auth')->group(function () {
+    Route::get('/reservasis', [ReservasiController::class, 'index'])->name('reservasis.index'); // Menampilkan daftar reservasi
+    Route::post('/submit-reservasi', [ReservasiController::class, 'store'])->name('reservasis.store'); // Menyimpan data reservasi baru
+    Route::get('/reservasi/{id}', [ReservasiController::class, 'show'])->name('reservasis.show'); // Menampilkan detail reservasi
+    Route::get('/reservasi/{id}/edit', [ReservasiController::class, 'edit'])->name('reservasis.edit'); // Menampilkan form edit reservasi
+    Route::put('/reservasi/{id}', [ReservasiController::class, 'update'])->name('reservasis.update'); // Mengupdate data reservasi
+    Route::delete('/reservasi/{id}', [ReservasiController::class, 'destroy'])->name('reservasis.destroy'); // Menghapus data reservasi
+});
