@@ -196,6 +196,9 @@ export default {
         if (response.ok) {
             const data = await response.json();
             alert(data.message);
+
+            // Redirect to /reservasilist after successful submission
+            window.location.href = '/reservasilist';
         } else {
             const errorData = await response.json();
             console.error('Error:', errorData);

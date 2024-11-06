@@ -45,10 +45,10 @@ Route::get('/reservasilist', function () {
     return Inertia::render('ReservasiListView');
 })->middleware(['auth'])->name('reservasilist');
 
-// Rute Edit Reservasi
-Route::get('/editreservasi', function () {
-    return Inertia::render('EditReservasiView');
-})->middleware(['auth'])->name('editreservasi');
+// // Rute Edit Reservasi
+// Route::get('/editreservasi', function () {
+//     return Inertia::render('EditReservasiView');
+// })->middleware(['auth'])->name('editreservasi');
 
 // Rute CRUD untuk Reservasi
 Route::middleware('auth')->group(function () {
