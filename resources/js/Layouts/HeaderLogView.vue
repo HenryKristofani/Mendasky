@@ -27,51 +27,25 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue'; // Import required Vue functions
-import { useRouter } from 'vue-router'; // Import useRouter from vue-router
+import { useRouter } from 'vue-router';
+import { Inertia } from '@inertiajs/inertia';
 
 export default {
   setup() {
-      const router = useRouter(); // Get the router instance
+    const router = useRouter();
 
-      // Store CSRF token in local storage on component mount
-      onMounted(() => {
-          const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-          localStorage.setItem("csrf_token", csrfToken);
+    const logout = async () => {
+      await Inertia.post(route('logout'), {}, {
+        onSuccess: () => {
+          // Reload the auth state automatically and redirect to the homepage
+          router.push("/");
+        }
       });
+    };
 
-      const logout = async () => {
-          try {
-              const token = localStorage.getItem("authToken");
-              const csrfToken = localStorage.getItem("csrf_token"); // Retrieve CSRF token from local storage
-              const response = await fetch("http://127.0.0.1:8000/logout", {
-                  method: "POST",
-                  headers: {
-                      Authorization: `Bearer ${token}`,
-                      Accept: "application/json",
-                      "Content-Type": "application/json",
-                      "X-CSRF-TOKEN": csrfToken, // Include CSRF token from local storage
-                  },
-                  credentials: "include",
-              });
-
-              if (!response.ok) {
-                  throw new Error("Logout failed");
-              }
-
-              // Clear tokens from local storage
-              localStorage.removeItem("authToken");
-              localStorage.removeItem("csrf_token"); // Clear CSRF token
-
-              // Redirect to the home page
-              router.push("/"); // Use Vue Router to redirect
-          } catch (error) {
-              console.error("Logout error:", error);
-              // Handle error as needed (e.g., show a notification)
-          }
-      };
-
-      return { logout }; // Return the logout function for template usage
+    return {
+      logout,
+    };
   },
 };
 </script>

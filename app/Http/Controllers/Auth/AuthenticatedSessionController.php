@@ -41,14 +41,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
-    
+        // Perform the logout
+        Auth::logout();
+
         // Invalidate the session and regenerate the token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-    
-        // Return a JSON response for successful logout
-        return response()->json(['message' => 'Successfully logged out']);
+
+        // Redirect back to the homepage
+        return Inertia::location('/');
     }
     
 /*************  ✨ Codeium Command ⭐  *************/
