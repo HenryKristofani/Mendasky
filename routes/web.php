@@ -50,6 +50,11 @@ Route::get('/editreservasi', function () {
     return Inertia::render('EditReservasiView');
 })->middleware(['auth'])->name('editreservasi');
 
+//rute berita
+Route::get('/berita', function () {
+    return Inertia::render('BeritaView');
+})->middleware(['auth'])->name('berita');
+
 // Rute CRUD untuk Reservasi
 Route::middleware('auth')->group(function () {
     Route::get('/reservasis', [ReservasiController::class, 'index'])->name('reservasis.index'); // Menampilkan daftar reservasi
