@@ -38,7 +38,7 @@ export default {
       await Inertia.post(route('logout'), {}, {
         onSuccess: () => {
           // Reload the auth state automatically and redirect to the homepage
-          router.push("/");
+          router.push('/');
         }
       });
     };
