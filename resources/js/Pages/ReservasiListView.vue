@@ -19,8 +19,8 @@
                     <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nik_ketua }}</td>
                     <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.telepon_ketua }}</td>
                     <td class="px-4 py-2 border-t border-gray-300 flex space-x-2">
-                        <button @click="editReservasi(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Edit</button>
-                        <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Hapus</button>
+                        <button @click="goToPembayaran(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar</button>
+                        <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Pembatalan</button>
                     </td>
                 </tr>
             </tbody>
@@ -50,17 +50,25 @@ export default {
         };
         onMounted(fetchReservasis);
 
-        // Fungsi untuk menghapus reservasi
+        // Fungsi untuk menghapus reservasi dan mengarahkan ke home
         const deleteReservasi = async (id) => {
-            if (confirm("Yakin ingin menghapus reservasi ini?")) {
+            if (confirm("Yakin ingin membatalkan reservasi ini?")) {
                 try {
-                    const response = await fetch(`/reservasi/${id}`, { method: 'DELETE' });
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const response = await fetch(`/reservasi/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken, // Menambahkan CSRF token
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                    });
                     if (!response.ok) throw new Error("Gagal menghapus data");
-                    reservasis.value = reservasis.value.filter(r => r.id !== id);
-                    alert("Reservasi berhasil dihapus.");
+                    alert("Reservasi berhasil dibatalkan.");
+                    window.location.href = '/home'; // Arahkan ke halaman home setelah pembatalan
                 } catch (error) {
                     console.error(error);
-                    alert("Terjadi kesalahan saat menghapus data.");
+                    alert("Terjadi kesalahan saat membatalkan reservasi.");
                 }
             }
         };
@@ -70,7 +78,12 @@ export default {
             Inertia.visit(`/reservasi/${id}/edit`); // Arahkan ke halaman edit dengan Inertia
         };
 
-        return { reservasis, deleteReservasi, editReservasi };
+        // Fungsi untuk pembayaran
+        const goToPembayaran = (id) => {
+            Inertia.visit(`/pembayaran/${id}`);
+        };
+
+        return { reservasis, deleteReservasi, editReservasi, goToPembayaran };
     }
 };
 </script>

@@ -61,5 +61,16 @@ Route::middleware('auth:web')->group(function () {
         return Inertia::render('BeritaView');
     })->name('berita');
 
-    Route::resource('reservasis', ReservasiController::class);
+    // Rute CRUD untuk Reservasi
+    Route::get('/reservasis', [ReservasiController::class, 'index'])->name('reservasis.index'); // Menampilkan daftar reservasi
+    Route::post('/submit-reservasi', [ReservasiController::class, 'store'])->name('reservasis.store'); // Menyimpan data reservasi baru
+    Route::get('/reservasi/{id}', [ReservasiController::class, 'show'])->name('reservasis.show'); // Menampilkan detail reservasi
+    Route::get('/reservasi/{id}/edit', [ReservasiController::class, 'edit'])->name('reservasis.edit'); // Menampilkan form edit reservasi
+    Route::put('/reservasi/{id}', [ReservasiController::class, 'update'])->name('reservasis.update'); // Mengupdate data reservasi
+    Route::delete('/reservasi/{id}', [ReservasiController::class, 'destroy'])->name('reservasis.destroy'); // Menghapus data reservasi
 });
+
+// Rute pembayaran
+Route::get('/pembayaran/{id}', function ($id) {
+    return Inertia::render('PembayaranView', ['id' => $id]);
+})->name('pembayaran.view');
