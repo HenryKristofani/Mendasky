@@ -47,10 +47,12 @@ class AuthenticatedSessionController extends Controller
         } else {
             Auth::guard('web')->logout();
         }
-
+    
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+    
+        // Redirect to home after logout
         return redirect('/');
     }
+    
 }
