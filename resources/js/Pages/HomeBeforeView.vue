@@ -16,8 +16,10 @@
           <Peringatan title="Kondisi Terkini Cuaca" />
           <Peringatan title="Cek Kuota Pendakian" />
       </div>
-      <Berita />
-      <InstallApp />
+        <Berita />
+      <div class="mt-10 mb-10">
+        <InstallApp />
+      </div>
   </MainLayout>
 </template>
 

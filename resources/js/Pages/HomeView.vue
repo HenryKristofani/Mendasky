@@ -14,7 +14,9 @@
             <Peringatan title="Cek Kuota Pendakian" />
         </div>
         <Berita />
-        <InstallApp />
+        <div class="mt-10 mb-10">
+            <InstallApp />
+        </div>
     </MainLogLayout>
   </template>
   
