@@ -1,45 +1,39 @@
 <template>
-    <HeaderLogView></HeaderLogView>
-        <section class="container mx-auto p-8">
-            <h1 class="text-2xl font-semibold mb-6">Daftar Reservasi Pendakian</h1>
+    <section class="container mx-auto p-8">
+        <h1 class="text-2xl font-semibold mb-6">Daftar Reservasi Pendakian</h1>
 
-            <table class="w-full border border-gray-300 border-collapse">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="px-4 py-2 border-gray-300">ID Booking</th>
-                        <th class="px-4 py-2 border-gray-300">Nama Ketua</th>
-                        <th class="px-4 py-2 border-gray-300">NIK Ketua</th>
-                        <th class="px-4 py-2 border-gray-300">Telepon Ketua</th>
-                        <th class="px-4 py-2 border-gray-300">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="reservasi in reservasis" :key="reservasi.id">
-                        <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.id }}</td>
-                        <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nama_ketua }}</td>
-                        <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nik_ketua }}</td>
-                        <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.telepon_ketua }}</td>
-                        <td class="px-4 py-2 border-t border-gray-300 flex space-x-2">
-                            <button @click="goToPembayaran(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar</button>
-                            <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Pembatalan</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <table class="w-full border border-gray-300 border-collapse">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="px-4 py-2 border-gray-300">ID Booking</th>
+                    <th class="px-4 py-2 border-gray-300">Nama Ketua</th>
+                    <th class="px-4 py-2 border-gray-300">NIK Ketua</th>
+                    <th class="px-4 py-2 border-gray-300">Telepon Ketua</th>
+                    <th class="px-4 py-2 border-gray-300">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="reservasi in reservasis" :key="reservasi.id">
+                    <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.id }}</td>
+                    <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nama_ketua }}</td>
+                    <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nik_ketua }}</td>
+                    <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.telepon_ketua }}</td>
+                    <td class="px-4 py-2 border-t border-gray-300 flex space-x-2">
+                        <button @click="goToPembayaran(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar</button>
+                        <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Pembatalan</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import HeaderLogView from '@/Layouts/HeaderLogView.vue';
 
 export default {
-    components: {
-        HeaderLogView
-    },
-
-    name: "ReservasiListView",
+    name: "ReservasiListAdmin",
     setup() {
         const reservasis = ref([]);
 
