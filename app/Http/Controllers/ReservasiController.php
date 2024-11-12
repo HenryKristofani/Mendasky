@@ -12,7 +12,7 @@ class ReservasiController extends Controller
     // Retrieve all reservations
     public function index()
     {
-        $reservasis = Reservasi::all();
+        $reservasis = Reservasi::where('user_id', auth()->id())->get();
         return response()->json($reservasis, 200);
     }
 
@@ -26,7 +26,6 @@ class ReservasiController extends Controller
     // Store a new reservation
     public function store(Request $request)
     {
-        // Validate input data
         $request->validate([
             'nama_ketua' => 'required|string|max:255',
             'nik_ketua' => 'required|string|max:20',
@@ -38,11 +37,10 @@ class ReservasiController extends Controller
             'anggota.*.nik' => 'required|string|max:20',
         ]);
 
-        // Save KTP image and get path
         $ktpPath = $request->file('ktp_ketua')->store('ktp_images', 'public');
 
-        // Create reservation record in the database
         Reservasi::create([
+            'user_id' => auth()->id(),
             'nama_ketua' => $request->nama_ketua,
             'nik_ketua' => $request->nik_ketua,
             'ktp_ketua_path' => $ktpPath,

@@ -43,6 +43,11 @@ Route::get('/admin/dashboard', function () {
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
+// Rute berita (akses terbuka tanpa login)
+Route::get('/berita', function () {
+    return Inertia::render('BeritaView');
+})->name('berita');
+
 // Rute lainnya
 Route::middleware('auth:web')->group(function () {
     Route::get('/home', function () {
@@ -56,10 +61,6 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/reservasilist', function () {
         return Inertia::render('ReservasiListView');
     })->name('reservasilist');
-
-    Route::get('/berita', function () {
-        return Inertia::render('BeritaView');
-    })->name('berita');
 
     // Rute CRUD untuk Reservasi
     Route::get('/reservasis', [ReservasiController::class, 'index'])->name('reservasis.index'); // Menampilkan daftar reservasi

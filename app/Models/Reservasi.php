@@ -9,33 +9,24 @@ class Reservasi extends Model
 {
     use HasFactory;
 
-    /**
-     * Tentukan tabel yang digunakan oleh model ini (opsional jika tabelnya sudah sesuai konvensi).
-     *
-     * @var string
-     */
     protected $table = 'reservasis';
 
-    /**
-     * Tentukan kolom-kolom yang bisa diisi secara massal.
-     *
-     * @var array
-     */
     protected $fillable = [
+        'user_id',           // Associate reservation with user
         'nama_ketua',
         'nik_ketua',
-        'ktp_ketua_path', // Kolom untuk menyimpan path gambar KTP
+        'ktp_ketua_path',
         'telepon_ketua',
         'alamat_ketua',
-        'anggota', // Kolom JSON untuk menyimpan data anggota kelompok
+        'anggota',
     ];
 
-    /**
-     * Tentukan bahwa kolom `anggota` akan diserialisasi sebagai JSON.
-     *
-     * @var array
-     */
     protected $casts = [
-        'anggota' => 'array', // Otomatis decode JSON ke array saat diakses
+        'anggota' => 'array', // Automatically decode JSON to array
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
