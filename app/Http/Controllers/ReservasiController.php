@@ -54,45 +54,6 @@ class ReservasiController extends Controller
         return response()->json(['message' => 'Reservasi berhasil disimpan'], 200);
     }
 
-    // Update a reservation
-    public function update(Request $request, $id)
-    {
-        // Find the reservation by ID
-        $reservasi = Reservasi::findOrFail($id);
-
-        // Validate input data
-        $request->validate([
-            'nama_ketua' => 'required|string|max:255',
-            'nik_ketua' => 'required|string|max:20',
-            'telepon_ketua' => 'required|string|max:15',
-            'alamat_ketua' => 'required|string',
-            'anggota' => 'required|array|max:4',
-            'anggota.*.nama' => 'required|string|max:255',
-            'anggota.*.nik' => 'required|string|max:20',
-        ]);
-
-        // Update the KTP image if provided
-        if ($request->hasFile('ktp_ketua')) {
-            // Delete the old KTP image
-            Storage::disk('public')->delete($reservasi->ktp_ketua_path);
-
-            // Store the new KTP image and update path
-            $ktpPath = $request->file('ktp_ketua')->store('ktp_images', 'public');
-            $reservasi->ktp_ketua_path = $ktpPath;
-        }
-
-        // Update other reservation details
-        $reservasi->update([
-            'nama_ketua' => $request->nama_ketua,
-            'nik_ketua' => $request->nik_ketua,
-            'telepon_ketua' => $request->telepon_ketua,
-            'alamat_ketua' => $request->alamat_ketua,
-            'anggota' => json_encode($request->anggota),
-        ]);
-
-        return response()->json(['message' => 'Reservasi berhasil diupdate'], 200);
-    }
-
     // Delete a reservation
     public function destroy($id)
     {
@@ -105,25 +66,5 @@ class ReservasiController extends Controller
         $reservasi->delete();
 
         return response()->json(['message' => 'Reservasi berhasil dihapus'], 200);
-    }
-
-    // Method to edit a reservation
-    public function edit($id)
-    {
-        // Retrieve the reservation data by ID
-        $reservasi = Reservasi::findOrFail($id);
-
-        // Send the data to the edit view via Inertia
-        return Inertia::render('EditReservasiView', [
-            'reservasi' => [
-                'id' => $reservasi->id,
-                'nama_ketua' => $reservasi->nama_ketua,
-                'nik_ketua' => $reservasi->nik_ketua,
-                'telepon_ketua' => $reservasi->telepon_ketua,
-                'alamat_ketua' => $reservasi->alamat_ketua,
-                'ktp_ketua_path' => $reservasi->ktp_ketua_path,
-                'anggota' => json_decode($reservasi->anggota, true),
-            ],
-        ]);
     }
 }

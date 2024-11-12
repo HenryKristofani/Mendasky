@@ -15,6 +15,8 @@ const routes = [
     { path: "/reservasilist", component: ReservasiList, name: "reservasilist" },
     { path: "/reservasi/:id/edit", component: EditReservasiView, name: "reservasis.edit" },
     { path: "/berita", component: Berita, name: "berita" },
+    { path: "/pembayaran/:id", component: Reservasi, name: "pembayaran.view" },
+    
 ];
 
 const router = createRouter({

@@ -33,7 +33,7 @@ import { ref, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 
 export default {
-    name: "ReservasiListView",
+    name: "ReservasiListAdmin",
     setup() {
         const reservasis = ref([]);
 
