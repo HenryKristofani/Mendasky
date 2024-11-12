@@ -14,7 +14,9 @@
             <Peringatan title="Cek Kuota Pendakian" />
         </div>
         <Berita />
-        <InstallApp />
+        <div class="mt-10 mb-10">
+            <InstallApp />
+        </div>
     </MainLogLayout>
   </template>
   
@@ -22,7 +24,7 @@
   import MainLogLayout from '../Layouts/MainLogLayout.vue';
   import HeroSection from './HomeComponents/hero.vue';
   import Detail from './HomeComponents/detail.vue';
-  import Peringatan from './HomeComponents/peringatan.vue';
+//   import Peringatan from './HomeComponents/peringatan.vue';
   import Berita from '../Pages/BeritaView.vue';
   import InstallApp from './HomeComponents/installapp.vue'
   
@@ -31,7 +33,7 @@
         MainLogLayout,
         HeroSection,
         Detail,
-        Peringatan,
+        // Peringatan,
         Berita,
         InstallApp
     }
