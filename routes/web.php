@@ -8,7 +8,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Rute beranda
+// Home route
 Route::get('/', function () {
     return Inertia::render('HomeBeforeView', [
         'canLogin' => Route::has('login'),
@@ -16,40 +16,37 @@ Route::get('/', function () {
     ]);
 });
 
-// Rute login (gunakan Login.vue di path yang baru)
+// User authentication routes
 Route::get('/login', function () {
-    return Inertia::render('Auth/Login'); // Menggunakan path baru untuk Login.vue
+    return Inertia::render('Auth/Login');
 })->name('login');
 
-// Proses login untuk admin dan user biasa
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-
-// Proses logout untuk admin dan user biasa
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-// Rute logout khusus admin
+// Admin-specific logout route
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
-// Rute dashboard pengguna biasa
+// User dashboard
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard'); // Halaman dashboard untuk pengguna biasa
+    return Inertia::render('Dashboard');
 })->middleware(['auth:web', 'verified'])->name('dashboard');
 
-// Rute dashboard admin (dengan middleware untuk memastikan admin hanya bisa login dengan email tertentu)
-Route::get('/admin/dashboard', function () {
-    return Inertia::render('DashboardView'); // Halaman dashboard khusus admin
-})->middleware(['auth:admin'])->name('admin.dashboard');
+// Admin dashboard with middleware for admin authentication
+Route::get('/admin/dashboard', [AdminController::class, 'showReservations'])
+    ->middleware(['auth:admin'])
+    ->name('admin.dashboard');
 
-// Rute register pengguna biasa
+// Registration routes for regular users
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store']);
 
-// Rute berita (akses terbuka tanpa login)
+// Public route for "Berita" (News) page, accessible without login
 Route::get('/berita', function () {
     return Inertia::render('BeritaView');
 })->name('berita');
 
-// Rute lainnya
+// User-specific routes with web middleware
 Route::middleware('auth:web')->group(function () {
     Route::get('/home', function () {
         return Inertia::render('HomeView');
@@ -62,8 +59,22 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/reservasilist', function () {
         return Inertia::render('ReservasiListView');
     })->name('reservasilist');
-
 });
 
+// Admin routes for managing reservations
+Route::middleware('auth:admin')->group(function () {
+    // Route to delete a reservation
+    Route::delete('/admin/reservations/{id}', [AdminController::class, 'deleteReservation'])
+        ->name('admin.reservations.delete');
 
+    // Route to edit a reservation
+    Route::get('/admin/reservations/{id}/edit', [AdminController::class, 'editReservation'])
+        ->name('admin.reservations.edit');
+
+    // Route to update a reservation
+    Route::put('/admin/reservations/{id}', [AdminController::class, 'updateReservation'])
+        ->name('admin.reservations.update');
+});
+
+// Additional routes for reservation controller, if required
 require __DIR__.'/reservasicontroller.php';

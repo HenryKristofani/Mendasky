@@ -1,58 +1,81 @@
 <template>
-    <div class="dashboard">
-        <h1>Admin Dashboard</h1>
-        <p>Selamat datang di halaman dashboard khusus admin dengan email admin@gmail.com!</p>
-        <button @click="logout" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
-            Logout
-        </button>
+    <div>
+        <header class="flex justify-between items-center p-4 bg-gray-800 text-white">
+            <h1>Admin Dashboard</h1>
+            <button @click="logout" class="px-4 py-2 bg-red-600 hover:bg-red-500 rounded">
+                Logout
+            </button>
+        </header>
+        
+        <table class="min-w-full bg-white mt-4 border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="py-2 px-4 border-b">ID Booking</th>
+                    <th class="py-2 px-4 border-b">Nama Ketua</th>
+                    <th class="py-2 px-4 border-b">NIK Ketua</th>
+                    <th class="py-2 px-4 border-b">Telepon Ketua</th>
+                    <th class="py-2 px-4 border-b">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="reservasi in reservasis" :key="reservasi.id">
+                    <td class="py-2 px-4 border-b">{{ reservasi.id }}</td>
+                    <td class="py-2 px-4 border-b">{{ reservasi.nama_ketua }}</td>
+                    <td class="py-2 px-4 border-b">{{ reservasi.nik_ketua }}</td>
+                    <td class="py-2 px-4 border-b">{{ reservasi.telepon_ketua }}</td>
+                    <td class="py-2 px-4 border-b">
+                        <button @click="editReservation(reservasi.id)" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded">Edit</button>
+                        <button @click="deleteReservation(reservasi.id)" class="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
 <script>
-export default {
-    methods: {
-        async logout() {
-            try {
-                const response = await fetch('/admin/logout', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    }
-                });
+import { Inertia } from '@inertiajs/inertia';
 
-                if (response.ok) {
-                    // Redirect to login page after logout
-                    window.location.href = '/';
-                } else {
-                    alert('Gagal logout. Silakan coba lagi.');
+export default {
+    props: {
+        reservasis: Array
+    },
+    methods: {
+        editReservation(id) {
+            Inertia.visit(`/admin/reservations/${id}/edit`);
+        },
+        deleteReservation(id) {
+            Inertia.delete(`/admin/reservations/${id}`, {
+                onSuccess: () => {
+                    this.$emit('reservationDeleted');
                 }
-            } catch (error) {
-                console.error('Logout error:', error);
-                alert('Terjadi kesalahan saat logout.');
-            }
+            });
+        },
+        logout() {
+            Inertia.post('/logout', {}, {
+                onSuccess: () => {
+                    Inertia.visit('/login');
+                }
+            });
         }
     }
 }
 </script>
 
 <style scoped>
-.dashboard {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-    background-color: #f4f6f8;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* Styling for the table and layout */
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-h1 {
-    font-size: 2rem;
-    color: #333;
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border: 1px solid #e5e7eb;
 }
 
-p {
-    font-size: 1.2rem;
-    color: #555;
+th {
+    background-color: #f3f4f6;
 }
 </style>
