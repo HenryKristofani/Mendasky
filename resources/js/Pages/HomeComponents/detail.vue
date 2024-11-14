@@ -9,18 +9,18 @@
       </p>
       <div class="self-stretch mt-8 w-full max-md:max-w-full">
         <div class="flex gap-5 max-md:flex-col">
-          <!-- Gambar Peta -->
+          <!-- Local Image for Map -->
           <div class="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
             <img loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/a08da7bae7e65ed7856ea8bf42f8c294647a140deee7a8d91aa89435a9bc4a5d?placeholderIfAbsent=true&apiKey=a6a4bb1a991e4a4fa4c25aa0ed6e28da"
+              src="/images/map.jpg"
               alt="Trail Map Mongkrang"
               class="object-contain w-full rounded-2xl aspect-[1.07] max-md:mt-10 max-md:max-w-full" />
           </div>
           
-          <!-- Artikel -->
+          <!-- Articles -->
           <div class="flex flex-col w-6/12 max-md:w-full">
             <div class="flex flex-col gap-5">
-              <!-- Artikel Kondisi Cuaca -->
+              <!-- Article for Weather Condition -->
               <article
                 class="relative flex flex-col justify-between p-8 w-full h-[250px] rounded-2xl bg-cover bg-center shadow-lg"
                 style="background-image: url('https://cdn.builder.io/api/v1/image/assets/TEMP/3ca3cd4e42ce0910e78bbb82932d987bf2c19401eb162af69d6c449bfedbee3e?placeholderIfAbsent=true&apiKey=a6a4bb1a991e4a4fa4c25aa0ed6e28da');">
@@ -28,12 +28,12 @@
                   Kondisi Terkini Cuaca
                 </h2>
                 <button
-                  class="self-end px-5 py-2 mt-4 text-base font-medium text-stone-900 bg-stone-50 rounded-xl">
+                  @click="goToCuaca" class="self-end px-5 py-2 mt-4 text-base font-medium text-stone-900 bg-stone-50 rounded-xl">
                   Detail
                 </button>
               </article>
 
-              <!-- Artikel Cek Kuota Pendakian -->
+              <!-- Article for Checking Hiking Quota -->
               <article
                 class="relative flex flex-col justify-between p-8 w-full h-[250px] rounded-2xl bg-cover bg-center shadow-lg"
                 style="background-image: url('https://cdn.builder.io/api/v1/image/assets/TEMP/3cf7e7e130869d5e206f2aa569274e61d08730f816e04acef1c16fead482395e?placeholderIfAbsent=true&apiKey=a6a4bb1a991e4a4fa4c25aa0ed6e28da');">
@@ -41,7 +41,7 @@
                   Cek Kuota Pendakian
                 </h2>
                 <button
-                  class="self-end px-5 py-2 mt-4 text-base font-medium text-stone-900 bg-stone-50 rounded-xl">
+                @click="goToKuota" class="self-end px-5 py-2 mt-4 text-base font-medium text-stone-900 bg-stone-50 rounded-xl">
                   Detail
                 </button>
               </article>
@@ -55,6 +55,15 @@
 
 <script>
 export default {
-  name: 'TrailMap'
-}
+  name: 'Detail',
+    methods: {
+      goToCuaca() {
+        window.location.href = '/cuaca';
+      },
+
+      goToKuota() {
+        window.location.href = '/kuota';
+      }
+    },
+  };
 </script>

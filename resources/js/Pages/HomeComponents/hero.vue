@@ -12,7 +12,7 @@
               <p class="mt-3.5 text-base text-center max-md:text-sm">
                   Temukan Tempat yang Sempurna untuk Liburan Anda di Mongkrang
               </p>
-              <button class="mt-10 px-8 py-4 bg-cyan-700 text-base font-medium tracking-wide rounded-md min-h-[50px] max-w-[200px] text-center hover:bg-cyan-800">
+              <button @click="goToReservasi" class="mt-10 px-8 py-4 bg-cyan-700 text-base font-medium tracking-wide rounded-md min-h-[50px] max-w-[200px] text-center hover:bg-cyan-800">
                   Daftar Sekarang
               </button>
           </div>
@@ -22,7 +22,12 @@
 
 <script>
 export default {
-  name: 'HeroSection'
+  name: 'HeroSection',
+  methods: {
+      goToReservasi() {
+        window.location.href = '/reservasi';
+      }
+    },
 }
 </script>
 

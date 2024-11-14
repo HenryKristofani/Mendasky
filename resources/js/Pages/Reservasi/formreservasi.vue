@@ -58,6 +58,18 @@
                     />
                 </div>
 
+                <!-- Tanggal Reservasi -->
+                <div class="mb-4">
+                    <label for="tanggal" class="block text-gray-700 font-semibold">Tanggal Reservasi</label>
+                    <input
+                        type="date"
+                        id="tanggal"
+                        v-model="tanggal_reservasi"
+                        class="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+                        required
+                    />
+                </div>
+
                 <!-- Alamat Ketua Kelompok -->
                 <div class="mb-6">
                     <label for="alamat" class="block text-gray-700 font-semibold">Alamat</label>
@@ -74,7 +86,6 @@
                 <!-- Form Anggota Kelompok -->
                 <div class="mb-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">Anggota Kelompok</h3>
-
                     <div v-for="(member, index) in anggota" :key="index" class="mb-4 border border-gray-300 rounded-md p-4">
                         <label :for="'nama_anggota_' + index" class="block text-gray-700 font-semibold">Nama Anggota</label>
                         <input
@@ -137,12 +148,9 @@ export default {
             ktp_ketua: null,
             telepon_ketua: "",
             alamat_ketua: "",
+            tanggal_reservasi: "",
+            csrf_token: document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // mengambil token CSRF langsung dari meta
         };
-    },
-    mounted() {
-        // Ambil CSRF token dari meta tag dan simpan di localStorage
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        localStorage.setItem('csrf_token', csrfToken);
     },
     methods: {
         addMember() {
@@ -157,59 +165,48 @@ export default {
             this.ktp_ketua = event.target.files[0];
         },
         async submitForm() {
-    // Validate that at least one member is present
-    if (this.anggota.length === 0) {
-        alert("Harap tambahkan setidaknya satu anggota.");
-        return;
-    }
+            if (this.anggota.length === 0) {
+                alert("Harap tambahkan setidaknya satu anggota.");
+                return;
+            }
 
-    // Create FormData to send with file
-    let formData = new FormData();
-    formData.append('nama_ketua', this.nama_ketua);
-    formData.append('nik_ketua', this.nik_ketua);
-    formData.append('ktp_ketua', this.ktp_ketua);
-    formData.append('telepon_ketua', this.telepon_ketua);
-    formData.append('alamat_ketua', this.alamat_ketua);
+            let formData = new FormData();
+            formData.append("nama_ketua", this.nama_ketua);
+            formData.append("nik_ketua", this.nik_ketua);
+            formData.append("ktp_ketua", this.ktp_ketua);
+            formData.append("telepon_ketua", this.telepon_ketua);
+            formData.append("alamat_ketua", this.alamat_ketua);
+            formData.append("tanggal_reservasi", this.tanggal_reservasi);
 
-    // Add each member to FormData as an array
-    this.anggota.forEach((member, index) => {
-        formData.append(`anggota[${index}][nama]`, member.nama);
-        formData.append(`anggota[${index}][nik]`, member.nik);
-    });
+            this.anggota.forEach((member, index) => {
+                formData.append(`anggota[${index}][nama]`, member.nama);
+                formData.append(`anggota[${index}][nik]`, member.nik);
+            });
 
-    // Log form data to the console for debugging
-    console.log(Array.from(formData)); // Check the structure of formData
+            try {
+                const response = await fetch("/submit-reservasi", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "X-CSRF-TOKEN": this.csrf_token,
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                });
 
-    // Get CSRF token from localStorage
-    const csrfToken = localStorage.getItem('csrf_token');
-
-    try {
-        const response = await fetch('/submit-reservasi', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': csrfToken, // Include CSRF token in headers
-                'X-Requested-With': 'XMLHttpRequest', // Indicate AJAX request
-            },
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            alert(data.message);
-
-            // Redirect to /reservasilist after successful submission
-            window.location.href = '/reservasilist';
-        } else {
-            const errorData = await response.json();
-            console.error('Error:', errorData);
-            alert('Terjadi kesalahan saat menyimpan data: ' + errorData.message);
-        }
-    } catch (error) {
-        console.error('Fetch error:', error);
-        alert('Terjadi kesalahan saat menyimpan data.');
-    }
-}
-
-    }
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    window.location.href = "/reservasilist";
+                } else {
+                    const errorData = await response.json();
+                    console.error("Error:", errorData);
+                    alert("Terjadi kesalahan saat menyimpan data: " + errorData.message);
+                }
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Terjadi kesalahan saat menyimpan data.");
+            }
+        },
+    },
 };
 </script>

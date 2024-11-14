@@ -117,8 +117,6 @@ class AdminController extends Controller
     
     
 
-
-
     // Show the details of a specific reservation (Action for admin)
     public function showReservationDetail($id)
     {
@@ -127,4 +125,38 @@ class AdminController extends Controller
             'reservasi' => $reservasi
         ]);
     }
+
+
+
+    // Fungsi untuk mendapatkan jumlah pendaki pada hari ini
+    public function getPendakiHariIni()
+    {
+    // Menghitung jumlah pendaki pada hari ini
+        $jumlahPendakiHariIni = Reservasi::whereDate('tanggal_reservasi', today())->count();
+        return Inertia::render('KuotaView', [
+                'jumlahPendakiHariIni' => $jumlahPendakiHariIni
+        ]);
+    }
+
+
+    public function getKuotaByDate($date)
+    {
+        // Ambil seluruh data reservasi yang sesuai dengan tanggal yang dipilih
+        $reservasis = Reservasi::whereDate('tanggal_reservasi', $date)->get();
+
+        // Mengambil jumlah seluruh pendaki (termasuk ketua dan anggota)
+        $kuota = 0;
+        foreach ($reservasis as $reservasi) {
+            // Jumlahkan ketua dan anggota
+            $kuota += 1; // Ketua Kelompok
+            $anggota = json_decode($reservasi->anggota, true);
+            $kuota += count($anggota); // Anggota Kelompok
+        }
+
+        return response()->json(['kuota' => $kuota]);
+    }
+
+
+    
+    
 }

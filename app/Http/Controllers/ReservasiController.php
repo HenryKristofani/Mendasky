@@ -20,6 +20,7 @@ class ReservasiController extends Controller
     public function show($id)
     {
         $reservasi = Reservasi::findOrFail($id);
+        $reservasi->anggota = json_decode($reservasi->anggota, true); // Decode anggota ke dalam array
         return response()->json($reservasi, 200);
     }
 
@@ -29,12 +30,13 @@ class ReservasiController extends Controller
         $request->validate([
             'nama_ketua' => 'required|string|max:255',
             'nik_ketua' => 'required|string|max:20',
-            'ktp_ketua' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'telepon_ketua' => 'required|string|max:15',
             'alamat_ketua' => 'required|string',
+            'tanggal_reservasi' => 'required|date', // Validate that the date is required
             'anggota' => 'required|array|max:4',
             'anggota.*.nama' => 'required|string|max:255',
             'anggota.*.nik' => 'required|string|max:20',
+            'ktp_ketua' => 'required|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $ktpPath = $request->file('ktp_ketua')->store('ktp_images', 'public');
@@ -43,10 +45,11 @@ class ReservasiController extends Controller
             'user_id' => auth()->id(),
             'nama_ketua' => $request->nama_ketua,
             'nik_ketua' => $request->nik_ketua,
-            'ktp_ketua_path' => $ktpPath,
             'telepon_ketua' => $request->telepon_ketua,
             'alamat_ketua' => $request->alamat_ketua,
-            'anggota' => json_encode($request->anggota),
+            'tanggal_reservasi' => $request->tanggal_reservasi, // Store the reservation date
+            'anggota' => json_encode($request->anggota), // Store anggota as JSON
+            'ktp_ketua_path' => $ktpPath,
         ]);
 
         return response()->json(['message' => 'Reservasi berhasil disimpan'], 200);

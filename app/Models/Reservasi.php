@@ -18,6 +18,7 @@ class Reservasi extends Model
         'ktp_ketua_path',
         'telepon_ketua',
         'alamat_ketua',
+        'tanggal_reservasi',
         'anggota',
     ];
 

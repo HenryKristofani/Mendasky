@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Reservasi;
 
 // Home route
 Route::get('/', function () {
@@ -75,6 +76,35 @@ Route::middleware('auth:admin')->group(function () {
     Route::put('/admin/reservations/{id}', [AdminController::class, 'updateReservation'])
         ->name('admin.reservations.update');
 });
+
+
+// Route untuk halaman cuaca
+Route::get('/cuaca', function () {
+    return Inertia::render('WeatherView');
+})->name('cuaca');
+
+
+//mengambil kuota
+Route::get('/kuota', function () {
+    $pendakiPerTanggal = Reservasi::selectRaw('tanggal_reservasi, COUNT(*) as jumlah_pendaki')
+        ->with('anggota')
+        ->groupBy('tanggal_reservasi')
+        ->get();
+
+    return Inertia::render('KuotaView', [
+        'pendakiPerTanggal' => $pendakiPerTanggal
+    ]);
+})->name('kuota');
+
+// Mengubah route /kuota agar tidak menggunakan middleware
+Route::get('/kuota', [AdminController::class, 'getPendakiHariIni'])->name('kuota');
+
+
+// Route untuk mengambil kuota berdasarkan tanggal
+Route::get('/api/kuota/{date}', [AdminController::class, 'getKuotaByDate']);
+
+
+
 
 // Additional routes for reservation controller, if required
 require __DIR__.'/reservasicontroller.php';
