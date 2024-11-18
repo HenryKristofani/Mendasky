@@ -94,7 +94,6 @@ class AdminController extends Controller
         return Inertia::render('EditReservasiView', ['reservation' => $reservation]);
     }
     
-
     // Update a specific reservation (Action for admin)
     public function updateReservation(Request $request, $id)
     {
@@ -115,8 +114,6 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('message', 'Reservation updated successfully.');
     }
     
-    
-
     // Show the details of a specific reservation (Action for admin)
     public function showReservationDetail($id)
     {
@@ -126,19 +123,17 @@ class AdminController extends Controller
         ]);
     }
 
-
-
     // Fungsi untuk mendapatkan jumlah pendaki pada hari ini
     public function getPendakiHariIni()
     {
-    // Menghitung jumlah pendaki pada hari ini
+        // Menghitung jumlah pendaki pada hari ini
         $jumlahPendakiHariIni = Reservasi::whereDate('tanggal_reservasi', today())->count();
         return Inertia::render('KuotaView', [
-                'jumlahPendakiHariIni' => $jumlahPendakiHariIni
+            'jumlahPendakiHariIni' => $jumlahPendakiHariIni
         ]);
     }
 
-
+    // Fungsi untuk mendapatkan kuota berdasarkan tanggal tertentu
     public function getKuotaByDate($date)
     {
         // Ambil seluruh data reservasi yang sesuai dengan tanggal yang dipilih
@@ -156,7 +151,32 @@ class AdminController extends Controller
         return response()->json(['kuota' => $kuota]);
     }
 
+    // Fungsi untuk mendapatkan jumlah pendaki per tanggal yang dipilih
+    public function getPendakiPerTanggal($tanggal)
+    {
+        // Ambil seluruh data reservasi yang sesuai dengan tanggal yang dipilih
+        $reservasis = Reservasi::whereDate('tanggal_reservasi', $tanggal)->get();
+    
+        // Mengambil jumlah seluruh pendaki (termasuk ketua dan anggota)
+        $pendaki = 0;
+        $allMembers = [];  // Menyimpan semua anggota
+        foreach ($reservasis as $reservasi) {
+            // Tambahkan ketua
+            $pendaki += 1;
+            $allMembers[] = $reservasi->nama_ketua;
+    
+            // Ambil anggota yang ada dan tambahkan ke total pendaki
+            $anggota = json_decode($reservasi->anggota, true);
+            foreach ($anggota as $member) {
+                $pendaki += 1;
+                $allMembers[] = $member['nama'];
+            }
+        }
+    
+        return response()->json(['pendaki' => $pendaki, 'members' => $allMembers]);
+    }
+     
+    
+    
 
-    
-    
 }

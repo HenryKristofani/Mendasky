@@ -104,6 +104,14 @@ Route::get('/kuota', [AdminController::class, 'getPendakiHariIni'])->name('kuota
 Route::get('/api/kuota/{date}', [AdminController::class, 'getKuotaByDate']);
 
 
+// Route untuk halaman rekomendasi
+Route::get('/rekomendasi', function () {
+    return Inertia::render('RekomendasiView');
+})->name('rekmendasi');
+
+
+// web.php atau api.php
+Route::get('/get-kuota/{tanggal}', [AdminController::class, 'getPendakiPerTanggal']);
 
 
 // Additional routes for reservation controller, if required
