@@ -2,7 +2,7 @@
     <div class="text-center mt-10">
       <h1 class="text-3xl font-bold">INI ADMIN</h1>
     </div>
-  </template>
+</template>
   
   <script>
   export default {

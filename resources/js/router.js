@@ -6,6 +6,7 @@ import Reservasi from "./Pages/ReservasiView.vue";
 import ReservasiList from "./Pages/ReservasiListView.vue";
 import EditReservasiView from "./Pages/EditReservasiView.vue"; // Import halaman edit reservasi
 import IsiBerita from "./Pages/Berita/isiberita.vue";
+import BayarReservasiView from "@/views/BayarReservasiView.vue"; // Import halaman pembayaran reservasi
 
 const routes = [
     { path: "/", component: HomeBeforeView, name: "homeBefore" },
@@ -15,6 +16,12 @@ const routes = [
     { path: "/reservasilist", component: ReservasiList, name: "reservasilist" },
     { path: "/reservasi/:id/edit", component: EditReservasiView, name: "reservasis.edit" },
     { path: "/berita", component: IsiBerita, name: "berita" },
+    { 
+        path: "/bayar/:id", 
+        component: BayarReservasiView, 
+        name: "bayar",
+        props: true, // Mengirim parameter id sebagai props ke komponen
+    },
 ];
 
 const router = createRouter({

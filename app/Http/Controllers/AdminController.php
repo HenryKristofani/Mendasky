@@ -176,7 +176,5 @@ class AdminController extends Controller
         return response()->json(['pendaki' => $pendaki, 'members' => $allMembers]);
     }
      
-    
-    
 
 }

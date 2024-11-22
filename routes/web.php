@@ -77,14 +77,12 @@ Route::middleware('auth:admin')->group(function () {
         ->name('admin.reservations.update');
 });
 
-
 // Route untuk halaman cuaca
 Route::get('/cuaca', function () {
     return Inertia::render('WeatherView');
 })->name('cuaca');
 
-
-//mengambil kuota
+// Mengambil kuota
 Route::get('/kuota', function () {
     $pendakiPerTanggal = Reservasi::selectRaw('tanggal_reservasi, COUNT(*) as jumlah_pendaki')
         ->with('anggota')
@@ -99,20 +97,33 @@ Route::get('/kuota', function () {
 // Mengubah route /kuota agar tidak menggunakan middleware
 Route::get('/kuota', [AdminController::class, 'getPendakiHariIni'])->name('kuota');
 
-
 // Route untuk mengambil kuota berdasarkan tanggal
 Route::get('/api/kuota/{date}', [AdminController::class, 'getKuotaByDate']);
-
 
 // Route untuk halaman rekomendasi
 Route::get('/rekomendasi', function () {
     return Inertia::render('RekomendasiView');
-})->name('rekmendasi');
-
+})->name('rekomendasi');
 
 // web.php atau api.php
 Route::get('/get-kuota/{tanggal}', [AdminController::class, 'getPendakiPerTanggal']);
 
-
 // Additional routes for reservation controller, if required
 require __DIR__.'/reservasicontroller.php';
+
+// ================== PENAMBAHAN ROUTE UNTUK BAYARRESERVASIVIEW ==================
+
+// Route untuk halaman pembayaran BayarReservasiView.vue
+Route::middleware('auth:web')->group(function () {
+    Route::get('/bayar', function () {
+        return Inertia::render('BayarReservasiView');
+    })->name('bayar');
+});
+
+
+//upload bukti pembayaran
+Route::post('/upload-bukti-pembayaran/{id}', [AdminController::class, 'uploadPaymentReceipt']);
+
+
+
+
