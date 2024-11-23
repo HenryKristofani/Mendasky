@@ -121,9 +121,5 @@ Route::middleware('auth:web')->group(function () {
 });
 
 
-//upload bukti pembayaran
-Route::post('/upload-bukti-pembayaran/{id}', [AdminController::class, 'uploadPaymentReceipt']);
-
-
-
-
+//bukti pembayaran
+Route::post('/reservasi/upload-bukti', [ReservasiController::class, 'uploadBuktiPembayaran']);

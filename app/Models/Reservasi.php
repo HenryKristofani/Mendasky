@@ -20,6 +20,7 @@ class Reservasi extends Model
         'alamat_ketua',
         'tanggal_reservasi',
         'anggota',
+        'bukti_pembayaran'
     ];
 
     protected $casts = [

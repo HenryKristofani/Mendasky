@@ -75,9 +75,13 @@ class AdminController extends Controller
     // Display all reservations made by users
     public function showReservations()
     {
-        $reservasis = Reservasi::with('user')->get(); // Retrieve all reservations with user data
+        // Mengambil semua reservasi yang sudah meng-upload bukti pembayaran
+        $reservasis = Reservasi::whereNotNull('bukti_pembayaran')->with('user')->get(); 
+    
+        // Mengirim data ke tampilan DashboardView
         return Inertia::render('DashboardView', ['reservasis' => $reservasis]);
     }
+    
 
     // Delete a specific reservation (Action for admin)
     public function deleteReservation($id)
@@ -117,11 +121,12 @@ class AdminController extends Controller
     // Show the details of a specific reservation (Action for admin)
     public function showReservationDetail($id)
     {
-        $reservasi = Reservasi::with('user')->findOrFail($id); // Fetch reservation and related user data if needed
+        $reservasi = Reservasi::with('user')->findOrFail($id); // Ambil data reservasi berdasarkan ID
         return Inertia::render('Dashboard/DetailKelompokView', [
-            'reservasi' => $reservasi
+            'reservasi' => $reservasi // Mengirim data reservasi, termasuk path bukti pembayaran
         ]);
     }
+    
 
     // Fungsi untuk mendapatkan jumlah pendaki pada hari ini
     public function getPendakiHariIni()
@@ -176,5 +181,7 @@ class AdminController extends Controller
         return response()->json(['pendaki' => $pendaki, 'members' => $allMembers]);
     }
      
+    
+
 
 }

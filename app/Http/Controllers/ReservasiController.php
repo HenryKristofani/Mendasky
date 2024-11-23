@@ -68,4 +68,51 @@ class ReservasiController extends Controller
 
         return response()->json(['message' => 'Reservasi berhasil dihapus'], 200);
     }
+
+    public function uploadBuktiPembayaran(Request $request)
+    {
+        try {
+            // Ambil ID reservasi secara otomatis berdasarkan user login
+            $reservasi = Reservasi::where('user_id', auth()->id())->latest()->first();
+    
+            if (!$reservasi) {
+                return response()->json([
+                    'message' => 'Reservasi tidak ditemukan untuk pengguna ini.',
+                ], 404);
+            }
+    
+            // Validasi file
+            $request->validate([
+                'bukti_pembayaran' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            ]);
+    
+            // Simpan file
+            $file = $request->file('bukti_pembayaran');
+            $path = $file->store('bukti_pembayaran', 'public');
+    
+            // Update reservasi dengan bukti pembayaran
+            $reservasi->bukti_pembayaran = $path;
+            $reservasi->save();
+    
+            return response()->json([
+                'message' => 'Bukti pembayaran berhasil diunggah!',
+                'path' => $path,
+            ], 200);
+    
+        } catch (\Exception $e) {
+            \Log::error('Error saat mengunggah bukti pembayaran: ' . $e->getMessage());
+    
+            return response()->json([
+                'message' => 'Terjadi kesalahan saat mengunggah bukti pembayaran.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
+    
+
+    
+    
+
+
+

@@ -1,96 +1,89 @@
 <template>
-  <div class="max-w-4xl mx-auto p-8">
-    <div class="bg-white rounded-lg shadow-lg p-8">
-      <!-- Header Section -->
-      <h1 class="text-3xl font-semibold text-gray-800 mb-6">Total Jumlah Anggota</h1>
-
-      <!-- Loading State -->
-      <div v-if="isLoading" class="text-center py-8">
-        <p class="text-gray-600">Memuat data anggota...</p>
-      </div>
-
-      <!-- Error State -->
-      <div v-else-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-        <p>{{ error }}</p>
-      </div>
-
-      <!-- Content Section -->
-      <div v-else class="space-y-6">
-        <!-- Informasi Reservasi -->
-        <div class="border-b pb-6">
-          <h2 class="text-xl font-semibold text-gray-700 mb-4">Informasi Anggota</h2>
-          <div class="grid grid-cols-1 gap-4">
-            <div>
-              <p class="text-gray-600">Total Anggota</p>
-              <p class="font-medium">{{ totalAnggota }} orang</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div>
+    <h2>Upload Bukti Pembayaran</h2>
+    <form @submit.prevent="uploadBuktiPembayaran">
+      <input type="file" @change="handleFileUpload" />
+      <button type="submit">Upload</button>
+    </form>
+    <p v-if="message" class="notification">{{ message }}</p>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-
 export default {
-  name: 'BayarReservasiView',
-  setup() {
-    const reservasi = ref({});
-    const isLoading = ref(true);
-    const error = ref(null);
-    const totalAnggota = ref(0);
-
-    const getReservasiId = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('id');
-    };
-
-    const fetchReservasi = async () => {
-      const id = getReservasiId();
-      if (!id) {
-        error.value = 'ID Reservasi tidak ditemukan';
-        isLoading.value = false;
-        return;
-      }
-
-      try {
-        const response = await fetch(`/reservasi/${id}`);
-        if (!response.ok) throw new Error('Gagal mengambil data reservasi');
-        
-        const data = await response.json();
-        reservasi.value = data;
-        // Hitung total anggota (ketua + anggota)
-        totalAnggota.value = (data.anggota?.length || 0) + 1; // +1 untuk ketua
-        
-      } catch (err) {
-        error.value = 'Terjadi kesalahan saat mengambil data reservasi';
-        console.error(err);
-      } finally {
-        isLoading.value = false;
-      }
-    };
-
-    onMounted(fetchReservasi);
-
+  data() {
     return {
-      reservasi,
-      isLoading,
-      error,
-      totalAnggota
+      file: null,
+      message: "",
     };
+  },
+  methods: {
+    handleFileUpload(event) {
+      this.file = event.target.files[0];
+    },
+    async uploadBuktiPembayaran() {
+  if (!this.file) {
+    this.message = "Silakan pilih file terlebih dahulu!";
+    return;
   }
+
+  const formData = new FormData();
+  formData.append("bukti_pembayaran", this.file);
+
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/reservasi/upload-bukti", {
+      method: "POST",
+      headers: {
+        "X-CSRF-TOKEN": csrfToken,
+      },
+      body: formData,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      this.message = "Bukti pembayaran berhasil diunggah! Mengarahkan ke halaman utama...";
+      console.log(data);
+
+      // Berikan jeda 3 detik sebelum mengarahkan ke /home
+      setTimeout(() => {
+        window.location.href = "/home";
+      }, 3000); // Jeda 3 detik
+    } else {
+      const errorData = await response.json();
+      this.message = `Error: ${errorData.message}`;
+      console.error(errorData);
+    }
+  } catch (error) {
+    this.message = "Terjadi kesalahan saat mengunggah bukti pembayaran.";
+    console.error(error);
+  }
+}
+,
+  },
 };
 </script>
 
 <style scoped>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
-
-.shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+button {
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #45a049;
+}
+.notification {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #4caf50;
 }
 </style>
