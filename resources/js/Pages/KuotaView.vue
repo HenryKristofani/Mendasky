@@ -80,8 +80,8 @@ export default {
   methods: {
     // Fungsi untuk mengambil data kuota selama satu bulan
     async fetchKuotaForMonth() {
-      const firstDay = new Date(this.selectedYear, this.selectedMonth, 1); // Tanggal pertama bulan
-      const lastDay = new Date(this.selectedYear, this.selectedMonth + 1, 0); // Tanggal terakhir bulan
+      const firstDay = new Date(this.selectedYear, this.selectedMonth, 2); // Tanggal pertama bulan
+      const lastDay = new Date(this.selectedYear, this.selectedMonth + 1, ); // Tanggal terakhir bulan
 
       // Membuat array tanggal dalam satu bulan
       let days = [];
