@@ -75,12 +75,16 @@ class AdminController extends Controller
     // Display all reservations made by users
     public function showReservations()
     {
-        // Mengambil semua reservasi yang sudah meng-upload bukti pembayaran
-        $reservasis = Reservasi::whereNotNull('bukti_pembayaran')->with('user')->get(); 
+        // Mengambil semua reservasi yang sudah meng-upload bukti pembayaran dan status_reservasi 'pending'
+        $reservasis = Reservasi::whereNotNull('bukti_pembayaran')
+                                ->where('status_reservasi', 'pending')
+                                ->with('user') // Mengambil data terkait dengan user yang terkait
+                                ->get(); 
     
         // Mengirim data ke tampilan DashboardView
         return Inertia::render('DashboardView', ['reservasis' => $reservasis]);
     }
+    
     
 
     // Delete a specific reservation (Action for admin)
@@ -182,6 +186,40 @@ class AdminController extends Controller
     }
      
     
+    public function konfirmasiReservasi($id)
+    {
+        try {
+            // Mencari reservasi berdasarkan ID
+            $reservasi = Reservasi::findOrFail($id);
+    
+            // Update status_reservasi menjadi 'confirmed'
+            $reservasi->status_reservasi = 'confirmed';
+            $reservasi->save();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Reservasi berhasil dikonfirmasi!',
+                'data' => $reservasi
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error saat mengonfirmasi reservasi: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat mengonfirmasi reservasi.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
+
+    public function showConfirmedReservations()
+    {
+        $reservasis = Reservasi::where('status_reservasi', 'confirmed')->get(); // Filter berdasarkan status_reservasi
+    
+        return Inertia::render('TerkonfirmasiView', [
+            'reservasis' => $reservasis,
+        ]);
+    }
+      
 
 }

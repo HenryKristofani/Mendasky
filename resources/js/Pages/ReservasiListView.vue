@@ -11,6 +11,7 @@
           <th class="px-4 py-2 border-gray-300">NIK Ketua</th>
           <th class="px-4 py-2 border-gray-300">Telepon Ketua</th>
           <th class="px-4 py-2 border-gray-300">Tanggal Reservasi</th>
+          <th class="px-4 py-2 border-gray-300">Status</th> <!-- Kolom Status -->
           <th class="px-4 py-2 border-gray-300">Aksi</th>
         </tr>
       </thead>
@@ -21,10 +22,22 @@
           <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.nik_ketua }}</td>
           <td class="px-4 py-2 border-t border-gray-300">{{ reservasi.telepon_ketua }}</td>
           <td class="px-4 py-2 border-t border-gray-300">{{ formatTanggal(reservasi.tanggal_reservasi) }}</td>
+          
+          <!-- Kolom Status -->
+          <td class="px-4 py-2 border-t border-gray-300">
+            <!-- Menampilkan status berdasarkan nilai status_reservasi -->
+            <span v-if="reservasi.status_reservasi === 'pending'" class="text-yellow-500">Menunggu Konfirmasi</span>
+            <span v-if="reservasi.status_reservasi === 'confirmed'" class="text-green-500">Terkonfirmasi</span>
+          </td>
+
           <td class="px-4 py-2 border-t border-gray-300 flex space-x-2">
             <button @click="showDetails(reservasi.id)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Detail</button>
-            <button @click="goToPembayaran(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar</button>
-            <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Pembatalan</button>
+            
+            <!-- Hanya tampilkan tombol Bayar dan Pembatalan jika status_reservasi bukan "confirmed" -->
+            <template v-if="reservasi.status_reservasi !== 'confirmed'">
+              <button @click="goToPembayaran(reservasi.id)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Bayar</button>
+              <button @click="deleteReservasi(reservasi.id)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Pembatalan</button>
+            </template>
           </td>
         </tr>
       </tbody>
@@ -141,23 +154,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.container {
-  max-width: 900px;
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th,
-td {
-  border: 1px solid #d1d5db;
-}
-
-th {
-  background-color: #e5e7eb;
-}
-</style>
