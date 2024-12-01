@@ -228,5 +228,17 @@ class AdminController extends Controller
         return response()->json(Auth::user());
     }
     
-
+    public function getJumlahPendaki($id)
+    {
+        // Ambil data reservasi berdasarkan ID
+        $reservasi = Reservasi::findOrFail($id);
+    
+        // Menghitung jumlah pendaki (1 untuk ketua + jumlah anggota dalam json)
+        $jumlahPendaki = 1; // Ketua kelompok (selalu ada)
+        $anggota = json_decode($reservasi->anggota, true);
+        $jumlahPendaki += count($anggota); // Menambahkan jumlah anggota
+    
+        return response()->json(['jumlah_pendaki' => $jumlahPendaki]);
+    }
+    
 }

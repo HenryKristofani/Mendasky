@@ -129,3 +129,7 @@ Route::get('/admin/terkonfirmasi', [AdminController::class, 'showConfirmedReserv
 
 //menampilkan profile nama dan email
 Route::middleware(['auth'])->get('/api/user', [AdminController::class, 'getUser']);
+
+
+//sdskdsa
+Route::get('/reservasi/{id}/jumlah-pendaki', [AdminController::class, 'getJumlahPendaki']);
