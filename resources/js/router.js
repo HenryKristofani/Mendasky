@@ -22,6 +22,14 @@ const routes = [
         name: "bayar",
         props: true, // Mengirim parameter id sebagai props ke komponen
     },
+    {
+        path: '/admin/dashboard',
+        component: DashboardView
+    },
+    {
+        path: '/admin/terkonfirmasi',
+        component: TerkonfirmasiView
+    }
 ];
 
 const router = createRouter({
