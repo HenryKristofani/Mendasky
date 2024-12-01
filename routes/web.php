@@ -119,18 +119,13 @@ Route::middleware('auth:web')->group(function () {
 //bukti pembayaran
 Route::post('/reservasi/upload-bukti', [ReservasiController::class, 'uploadBuktiPembayaran']);
 
+//lupa buat apa
 Route::middleware(['auth:admin'])->post('/admin/reservasi/{id}/konfirmasi', [AdminController::class, 'konfirmasiReservasi']);
-
-//menampilkan terkonfirmasi
-// Route::middleware('auth:admin')->group(function () {
-//     Route::get('/admin/terkonfirmasi', function () {
-//         return Inertia::render('TerkonfirmasiView');
-//     })->name('admin.terkonfirmasi');
-// });
-
-
 
 // Admin dashboard with middleware for admin authentication
 Route::get('/admin/terkonfirmasi', [AdminController::class, 'showConfirmedReservations'])
     ->middleware(['auth:admin'])
     ->name('admin.terkonfirmasi');
+
+//menampilkan profile nama dan email
+Route::middleware(['auth'])->get('/api/user', [AdminController::class, 'getUser']);

@@ -10,4 +10,6 @@
   import HeaderLogView from './HeaderLogView.vue';
   import FooterView from './FooterView.vue';
   </script>
+
+  
   

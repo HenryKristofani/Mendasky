@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     async fetchWeather() {
-      const apiKey = '69324fc30bc9458581865221241411'; // Ganti dengan API Key Anda dari WeatherAPI.com
+      const apiKey = 'bf81a0de9a6f483dbba52641240112'; // Ganti dengan API Key Anda dari WeatherAPI.com
       const city = 'Tawangmangu'; // Gantilah dengan nama kota yang diinginkan
       const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&days=7`;
 

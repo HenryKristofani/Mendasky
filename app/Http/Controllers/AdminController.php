@@ -7,6 +7,7 @@ use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -220,6 +221,12 @@ class AdminController extends Controller
             'reservasis' => $reservasis,
         ]);
     }
-      
+    
+    //mendapatkan informasi users
+    public function getUser(Request $request)
+    {
+        return response()->json(Auth::user());
+    }
+    
 
 }

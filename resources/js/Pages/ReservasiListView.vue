@@ -25,10 +25,14 @@
           
           <!-- Kolom Status -->
           <td class="px-4 py-2 border-t border-gray-300">
-            <!-- Menampilkan status berdasarkan nilai status_reservasi -->
-            <span v-if="reservasi.status_reservasi === 'pending'" class="text-yellow-500">Menunggu Konfirmasi</span>
-            <span v-if="reservasi.status_reservasi === 'confirmed'" class="text-green-500">Terkonfirmasi</span>
+          <!-- Cek jika bukti_pembayaran kosong -->
+          <span v-if="!reservasi.bukti_pembayaran" class="text-red-500">Silakan mengupload bukti pembayaran</span>  
+          <!-- Menunggu Konfirmasi jika bukti_pembayaran sudah ada dan status_reservasi 'pending' -->
+          <span v-else-if="reservasi.status_reservasi === 'pending'" class="text-yellow-500">Menunggu Konfirmasi</span>
+          <!-- Terkonfirmasi jika bukti_pembayaran sudah ada dan status_reservasi 'confirmed' -->
+          <span v-else-if="reservasi.status_reservasi === 'confirmed'" class="text-green-500">Terkonfirmasi</span>
           </td>
+
 
           <td class="px-4 py-2 border-t border-gray-300 flex space-x-2">
             <button @click="showDetails(reservasi.id)" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Detail</button>
@@ -84,17 +88,18 @@ export default {
     const selectedReservasi = ref(null);
 
     const fetchReservasis = async () => {
-      try {
-        const response = await fetch("/reservasis");
-        if (!response.ok) throw new Error("Gagal mengambil data");
-        reservasis.value = await response.json();
-      } catch (error) {
-        console.error(error);
-        alert("Terjadi kesalahan saat mengambil data reservasi.");
-      }
-    };
+  try {
+    const response = await fetch("/reservasis");
+    if (!response.ok) throw new Error("Gagal mengambil data");
+    reservasis.value = await response.json();
+  } catch (error) {
+    console.error(error);
+    alert("Terjadi kesalahan saat mengambil data reservasi.");
+  }
+};
 
-    onMounted(fetchReservasis);
+onMounted(fetchReservasis);
+
 
     const showDetails = async (id) => {
       try {

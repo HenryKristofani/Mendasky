@@ -124,7 +124,7 @@
           const formattedDate = currentDate.toISOString().split('T')[0];
   
           // Ambil data cuaca dari API
-          const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=69324fc30bc9458581865221241411&q=Tawangmangu&days=7&date=${formattedDate}`);
+          const weatherResponse = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=bf81a0de9a6f483dbba52641240112&q=Tawangmangu&days=7&date=${formattedDate}`);
           const weatherData = await weatherResponse.json();
   
           // Ambil kuota dan anggota dari API Laravel
