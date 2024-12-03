@@ -5,15 +5,33 @@
       <h2 class="text-xl font-semibold mb-6">Admin Dashboard</h2>
       <nav>
         <ul>
-          <li><a href="/admin/dashboard" class="block py-2 px-4 hover:bg-gray-700 rounded">Menunggu Konfirmasi</a></li>
-          <li><a href="/admin/terkonfirmasi" class="block py-2 px-4 hover:bg-gray-700 rounded">Terkonfirmasi</a></li>
-          <li><a href="#" @click="logout" class="block py-2 px-4 mt-6 bg-red-600 hover:bg-red-500 rounded">Logout</a></li>
+          <li>
+            <a href="/admin/dashboard" 
+               :class="{'bg-gray-700': true}" 
+               class="block py-2 px-4 hover:bg-gray-700 rounded">
+              Menunggu Konfirmasi
+            </a>
+          </li>
+          <li>
+            <a href="/admin/terkonfirmasi" 
+               class="block py-2 px-4 hover:bg-gray-700 rounded">
+              Terkonfirmasi
+            </a>
+          </li>
+          <li>
+            <a href="#" @click="logout" 
+               class="block py-2 px-4 mt-6 bg-red-600 hover:bg-red-500 rounded">
+              Logout
+            </a>
+          </li>
         </ul>
       </nav>
     </aside>
     
     <!-- Main Content Area -->
-    <main class="flex-1 p-6 bg-gray-100">Menunggu Dikonfirmasi
+    <main class="flex-1 p-6 bg-gray-100">
+      <h1 class="text-2xl font-bold mb-6">Menunggu Dikonfirmasi</h1>
+      
       <table class="min-w-full bg-white mt-4 border border-gray-300">
         <thead>
           <tr class="bg-gray-200">
@@ -75,6 +93,7 @@
         </div>
       </div>
       
+      <!-- Modal for displaying image -->
       <div v-if="selectedImage" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white p-4 rounded-lg relative">
           <button @click="closeImage" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
@@ -103,32 +122,31 @@ export default {
   },
   methods: {
     async konfirmasiReservasi(reservasiId) {
-  try {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+      try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
 
-    const response = await fetch(`/admin/reservasi/${reservasiId}/konfirmasi`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-TOKEN": csrfToken,
-        "Content-Type": "application/json"
+        const response = await fetch(`/admin/reservasi/${reservasiId}/konfirmasi`, {
+          method: "POST",
+          headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          this.$inertia.reload(); // Jika menggunakan Inertia
+        } else {
+          const errorData = await response.json();
+          console.error('Gagal mengonfirmasi reservasi:', errorData);
+          alert(errorData.message || 'Terjadi kesalahan saat mengonfirmasi reservasi');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan jaringan');
       }
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      // Refresh or update the page as needed
-      this.$inertia.reload(); // If using Inertia
-    } else {
-      const errorData = await response.json();
-      console.error('Gagal mengonfirmasi reservasi:', errorData);
-      alert(errorData.message || 'Terjadi kesalahan saat mengonfirmasi reservasi');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('Terjadi kesalahan jaringan');
-  }
-},    
+    },
     formatDate(date) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(date).toLocaleDateString('id-ID', options);
@@ -166,56 +184,15 @@ export default {
       }
     },
     deleteReservation(id) {
-      Inertia.delete(`/admin/reservations/${id}`, {
-        onSuccess: () => {
-          this.$emit('reservationDeleted');
-        }
-      });
+      Inertia.delete(`/admin/reservasi/${id}`);
     },
     logout() {
-      Inertia.post('/logout', {}, {
-        onSuccess: () => {
-          Inertia.visit('/login');
-        }
-      });
-    },
-    methods: {
-  }    
+      Inertia.post('/logout');
+    }
   }
 };
 </script>
 
 <style scoped>
-/* Sidebar styling */
-aside {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  z-index: 10;
-}
-
-main {
-  margin-left: 16rem; /* Adjust to sidebar width */
-}
-
-/* Table styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 0.75rem;
-  text-align: left;
-  border: 1px solid #e5e7eb;
-}
-
-th {
-  background-color: #f4f4f4;
-}
-
-button {
-  cursor: pointer;
-}
+/* Styling khusus untuk komponen ini */
 </style>
