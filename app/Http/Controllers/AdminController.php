@@ -282,6 +282,29 @@ public function blockUser($id)
     }
 }
 
+public function unblockUser($id)
+{
+    try {
+        \Log::info("Attempting to unblock user with ID: $id");
+
+        $user = User::findOrFail($id);
+
+        \Log::info("User found: ", $user->toArray());
+
+        $user->status = 'aktif'; // Ubah status kembali ke 'aktif'
+        $user->save();
+
+        \Log::info("User unblocked successfully.");
+
+        return response()->json(['message' => 'User unblocked successfully.'], 200);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        \Log::error("User not found with ID: $id");
+        return response()->json(['message' => 'User not found.'], 404);
+    } catch (\Exception $e) {
+        \Log::error("Error unblocking user: " . $e->getMessage());
+        return response()->json(['message' => 'An error occurred while unblocking the user.'], 500);
+    }
+}
 
 
 

@@ -153,4 +153,5 @@ Route::get('/api/users', [AdminController::class, 'listUsers']);
 
 Route::put('/api/users/{id}/block', [AdminController::class, 'blockUser']);
 
+Route::put('/api/users/{id}/unblock', [AdminController::class, 'unblockUser']);
 
