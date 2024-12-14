@@ -19,6 +19,12 @@
             </a>
           </li>
           <li>
+            <a href="/admin/list-users" 
+               class="block py-2 px-4 hover:bg-gray-700 rounded">
+              List User
+            </a>
+          </li>
+          <li>
             <a href="#" @click="logout" 
                class="block py-2 px-4 mt-6 bg-red-600 hover:bg-red-500 rounded">
               Logout

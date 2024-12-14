@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -239,6 +240,32 @@ class AdminController extends Controller
         $jumlahPendaki += count($anggota); // Menambahkan jumlah anggota
     
         return response()->json(['jumlah_pendaki' => $jumlahPendaki]);
+    }
+    
+
+
+
+
+
+
+
+
+
+    public function listUsers()
+    {
+        $users = User::all();
+        return response()->json($users);
+    }
+
+    public function blockUser($id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            $user->status = 'blocked'; // Update the status to 'blocked'
+            $user->save();
+            return response()->json(['message' => 'User blocked successfully.'], 200);
+        }
+        return response()->json(['message' => 'User not found.'], 404);
     }
     
 }

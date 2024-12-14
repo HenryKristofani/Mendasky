@@ -133,3 +133,25 @@ Route::middleware(['auth'])->get('/api/user', [AdminController::class, 'getUser'
 
 //sdskdsa
 Route::get('/reservasi/{id}/jumlah-pendaki', [AdminController::class, 'getJumlahPendaki']);
+
+
+
+
+
+
+
+
+// Tambahkan rute baru untuk List User di bagian admin
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/admin/list-users', function () {
+        return Inertia::render('ListUserView');
+    })->name('admin.list-users');
+});
+
+
+Route::get('/api/users', [AdminController::class, 'listUsers']);
+
+
+Route::put('/api/users/{id}/block', [AdminController::class, 'blockUser']);
+
+
