@@ -151,7 +151,6 @@ Route::middleware(['auth:admin'])->group(function () {
 
 Route::get('/api/users', [AdminController::class, 'listUsers']);
 
-
 Route::put('/api/users/{id}/block', [AdminController::class, 'blockUser']);
 
 

@@ -257,15 +257,33 @@ class AdminController extends Controller
         return response()->json($users);
     }
 
-    public function blockUser($id)
-    {
-        $user = User::find($id);
-        if ($user) {
-            $user->status = 'blocked'; // Update the status to 'blocked'
-            $user->save();
-            return response()->json(['message' => 'User blocked successfully.'], 200);
-        }
+// app/Http/Controllers/AdminController.php
+public function blockUser($id)
+{
+    try {
+        \Log::info("Attempting to block user with ID: $id");
+
+        $user = User::findOrFail($id);
+
+        \Log::info("User found: ", $user->toArray());
+
+        $user->status = 'blokir'; // Ubah nilai menjadi 'blokir' sesuai ENUM di database
+        $user->save();
+
+        \Log::info("User blocked successfully.");
+
+        return response()->json(['message' => 'User blocked successfully.'], 200);
+    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        \Log::error("User not found with ID: $id");
         return response()->json(['message' => 'User not found.'], 404);
+    } catch (\Exception $e) {
+        \Log::error("Error blocking user: " . $e->getMessage());
+        return response()->json(['message' => 'An error occurred while blocking the user.'], 500);
     }
+}
+
+
+
+
     
 }
