@@ -38,40 +38,41 @@
     <main class="flex-1 p-6 bg-gray-100">
       <h1 class="text-2xl font-bold mb-6">Terkonfirmasi</h1>
       <table class="min-w-full bg-white mt-4 border border-gray-300">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="py-2 px-4 border-b">ID Booking</th>
-            <th class="py-2 px-4 border-b">Nama Ketua</th>
-            <th class="py-2 px-4 border-b">NIK Ketua</th>
-            <th class="py-2 px-4 border-b">Telepon Ketua</th>
-            <th class="py-2 px-4 border-b">Tanggal Reservasi</th>
-            <th class="py-2 px-4 border-b">Bukti Pembayaran</th>
-            <th class="py-2 px-4 border-b">Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="reservasi in reservasis" :key="reservasi.id">
-            <td class="py-2 px-4 border-b">{{ reservasi.id }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.nama_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.nik_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.telepon_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ formatDate(reservasi.tanggal_reservasi) }}</td>
-            <td class="py-2 px-4 border-b">
-              <img v-if="reservasi.bukti_pembayaran" 
-                   :src="`/storage/${reservasi.bukti_pembayaran}`" 
-                   alt="Bukti Pembayaran" 
-                   class="w-16 h-16 cursor-pointer"
-                   @click="viewImage(`/storage/${reservasi.bukti_pembayaran}`)" />
-              <p v-else class="text-red-500">Belum Upload</p>
-            </td>
-            <td class="py-2 px-4 border-b flex space-x-2">
-              <button @click="viewDetails(reservasi.id)" class="bg-gray-500 hover:bg-gray-400 text-white px-2 py-1 rounded">Detail</button>
-              <button @click="confirmEdit(reservasi.id)" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded">Edit</button>
-              <button @click="confirmDelete(reservasi.id)" class="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <thead>
+    <tr class="bg-gray-200">
+      <th class="py-2 px-4 border-b border-r">ID Booking</th>
+      <th class="py-2 px-4 border-b border-r">Nama Ketua</th>
+      <th class="py-2 px-4 border-b border-r">NIK Ketua</th>
+      <th class="py-2 px-4 border-b border-r">Telepon Ketua</th>
+      <th class="py-2 px-4 border-b border-r">Tanggal Reservasi</th>
+      <th class="py-2 px-4 border-b border-r">Bukti Pembayaran</th>
+      <th class="py-2 px-4 border-b">Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="reservasi in reservasis" :key="reservasi.id">
+      <td class="py-2 px-4 border-b border-r">{{ reservasi.id }}</td>
+      <td class="py-2 px-4 border-b border-r">{{ reservasi.nama_ketua }}</td>
+      <td class="py-2 px-4 border-b border-r">{{ reservasi.nik_ketua }}</td>
+      <td class="py-2 px-4 border-b border-r">{{ reservasi.telepon_ketua }}</td>
+      <td class="py-2 px-4 border-b border-r">{{ formatDate(reservasi.tanggal_reservasi) }}</td>
+      <td class="py-2 px-4 border-b border-r">
+        <img v-if="reservasi.bukti_pembayaran" 
+             :src="`/storage/${reservasi.bukti_pembayaran}`" 
+             alt="Bukti Pembayaran" 
+             class="w-16 h-16 cursor-pointer"
+             @click="viewImage(`/storage/${reservasi.bukti_pembayaran}`)" />
+        <p v-else class="text-red-500">Belum Upload</p>
+      </td>
+      <td class="py-2 px-4 border-b flex space-x-2">
+        <button @click="viewDetails(reservasi.id)" class="bg-gray-500 hover:bg-gray-400 text-white px-2 py-1 rounded">Detail</button>
+        <button @click="confirmEdit(reservasi.id)" class="bg-blue-500 hover:bg-blue-400 text-white px-2 py-1 rounded">Edit</button>
+        <button @click="confirmDelete(reservasi.id)" class="bg-red-500 hover:bg-red-400 text-white px-2 py-1 rounded">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 
       <!-- Modal for displaying image -->
       <div v-if="selectedImage" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">

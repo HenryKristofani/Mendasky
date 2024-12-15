@@ -41,23 +41,23 @@
       <table class="min-w-full bg-white mt-4 border border-gray-300">
         <thead>
           <tr class="bg-gray-200">
-            <th class="py-2 px-4 border-b">ID Booking</th>
-            <th class="py-2 px-4 border-b">Nama Ketua</th>
-            <th class="py-2 px-4 border-b">NIK Ketua</th>
-            <th class="py-2 px-4 border-b">Telepon Ketua</th>
-            <th class="py-2 px-4 border-b">Tanggal Reservasi</th>
-            <th class="py-2 px-4 border-b">Bukti Pembayaran</th>
+            <th class="py-2 px-4 border-b border-r">ID Booking</th>
+            <th class="py-2 px-4 border-b border-r">Nama Ketua</th>
+            <th class="py-2 px-4 border-b border-r">NIK Ketua</th>
+            <th class="py-2 px-4 border-b border-r">Telepon Ketua</th>
+            <th class="py-2 px-4 border-b border-r">Tanggal Reservasi</th>
+            <th class="py-2 px-4 border-b border-r">Bukti Pembayaran</th>
             <th class="py-2 px-4 border-b">Aksi</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="reservasi in reservasis" :key="reservasi.id">
-            <td class="py-2 px-4 border-b">{{ reservasi.id }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.nama_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.nik_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ reservasi.telepon_ketua }}</td>
-            <td class="py-2 px-4 border-b">{{ formatDate(reservasi.tanggal_reservasi) }}</td>
-            <td class="py-2 px-4 border-b">
+            <td class="py-2 px-4 border-b border-r">{{ reservasi.id }}</td>
+            <td class="py-2 px-4 border-b border-r">{{ reservasi.nama_ketua }}</td>
+            <td class="py-2 px-4 border-b border-r">{{ reservasi.nik_ketua }}</td>
+            <td class="py-2 px-4 border-b border-r">{{ reservasi.telepon_ketua }}</td>
+            <td class="py-2 px-4 border-b border-r">{{ formatDate(reservasi.tanggal_reservasi) }}</td>
+            <td class="py-2 px-4 border-b border-r">
               <img v-if="reservasi.bukti_pembayaran" 
                    :src="`/storage/${reservasi.bukti_pembayaran}`" 
                    alt="Bukti Pembayaran" 
@@ -111,6 +111,7 @@
     </main>
   </div>
 </template>
+
 
 <script>
 import { Inertia } from '@inertiajs/inertia';

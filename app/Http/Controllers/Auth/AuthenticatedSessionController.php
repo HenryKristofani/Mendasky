@@ -14,7 +14,7 @@ class AuthenticatedSessionController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-
+    
         // Coba login sebagai admin
         if (Auth::guard('admin')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
             $request->session()->regenerate();
@@ -23,22 +23,31 @@ class AuthenticatedSessionController extends Controller
                 'redirect' => url('/admin/dashboard')
             ]);
         }
-
-        // Coba login sebagai user biasa
-        if (Auth::guard('web')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            $request->session()->regenerate();
-            return response()->json([
-                'success' => true,
-                'redirect' => url('/home')
-            ]);
+    
+        // Ambil user berdasarkan email
+        $user = \App\Models\User::where('email', $request->email)->first();
+    
+        // Cek apakah user ada dan statusnya aktif
+        if ($user && $user->status === 'aktif') {
+            // Coba login sebagai user biasa
+            if (Auth::guard('web')->attempt($request->only('email', 'password'), $request->filled('remember'))) {
+                $request->session()->regenerate();
+                return response()->json([
+                    'success' => true,
+                    'redirect' => url('/home')
+                ]);
+            }
         }
-
+    
         // Jika login gagal
         return response()->json([
             'success' => false,
-            'message' => 'The provided credentials do not match our records.'
+            'message' => $user && $user->status !== 'aktif'
+                ? 'Akun Anda sedang diblokir! silahkan hubungi admin.'
+                : 'Akun tidak ditemukan.'
         ], 401);
     }
+    
 
     public function destroy(Request $request)
     {
